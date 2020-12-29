@@ -8,6 +8,7 @@
     SPDX-License-Identifier: MIT
     See LICENSES/MIT.md for more information.
 """
+import sys
 import time
 from functools import wraps
 
@@ -31,6 +32,7 @@ class Logging(object):
     LEVEL_NOTSET = None
 
     def __init__(self):
+        self.PY_IS_VER2 = sys.version_info.major == 2
         self.level = self.LEVEL_NOTSET
         self.__addon_id = None
         self.__plugin_handle = None
@@ -70,6 +72,8 @@ class Logging(object):
             identifier=self.__addon_id,
             handle=self.__plugin_handle,
             msg=msg)
+        if self.PY_IS_VER2:
+            message = message.encode('utf-8')
         xbmc.log(message, log_level)
 
     def _debug(self, msg, *args, **kwargs):
