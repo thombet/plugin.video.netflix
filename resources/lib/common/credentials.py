@@ -14,6 +14,8 @@ import base64
 import json
 from datetime import datetime
 
+from future.utils import raise_from
+
 from resources.lib.common.exceptions import MissingCredentialsError
 from resources.lib.globals import G
 from resources.lib.utils.logging import LOG
@@ -85,7 +87,7 @@ def get_credentials():
             'password': decrypt_credential(password).decode('utf-8')
         }
     except Exception as exc:  # pylint: disable=broad-except
-        raise MissingCredentialsError('Existing credentials could not be decrypted') from exc
+        raise_from(MissingCredentialsError('Existing credentials could not be decrypted'), exc)
 
 
 def check_credentials():

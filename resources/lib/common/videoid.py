@@ -10,6 +10,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 from functools import wraps
+from future.utils import raise_from
 
 from .exceptions import InvalidVideoId
 
@@ -59,7 +60,7 @@ class VideoId(object):
         try:
             self._mediatype = VideoId.VALIDATION_MASKS[validation_mask]
         except KeyError as exc:
-            raise InvalidVideoId from exc
+            raise_from(InvalidVideoId, exc)
 
     @classmethod
     def from_path(cls, pathitems):
@@ -307,7 +308,8 @@ def inject_video_id(path_offset, pathitems_arg='pathitems',
                 _path_to_videoid(kwargs, pathitems_arg, path_offset,
                                  inject_remaining_pathitems, inject_full_pathitems)
             except KeyError as exc:
-                raise Exception('Pathitems must be passed as kwarg {}'.format(pathitems_arg)) from exc
+                raise_from(Exception('Pathitems must be passed as kwarg {}'.format(pathitems_arg)),
+                           exc)
             return func(*args, **kwargs)
         return wrapper
     return injecting_decorator

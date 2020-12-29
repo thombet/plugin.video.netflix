@@ -12,6 +12,8 @@ from __future__ import absolute_import, division, unicode_literals
 import json
 import time
 
+from future.utils import raise_from
+
 import xbmcaddon
 
 import resources.lib.common as common
@@ -269,7 +271,7 @@ class MSLHandler(object):
                 msg = ('This title is not available to watch instantly. Please try another title.\r\n'
                        'To try to solve this problem you can force "Widevine L3" from the add-on Expert settings.\r\n'
                        'More info in the Wiki FAQ on add-on GitHub.')
-                raise MSLError(msg) from exc
+                raise_from(MSLError(msg), exc)
             raise
         # This xid must be used also for each future Event request, until playback stops
         G.LOCAL_DB.set_value('xid', xid, TABLE_SESSION)

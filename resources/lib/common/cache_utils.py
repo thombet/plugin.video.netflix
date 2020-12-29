@@ -10,6 +10,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 from functools import wraps
+from future.utils import raise_from
 
 from resources.lib.globals import G
 from resources.lib.utils.logging import LOG
@@ -131,4 +132,4 @@ def deserialize_data(value):
         # TypeError/EOFError happen when standard_b64decode fails
         # This should happen only if manually mixing the database data
         LOG.error('It was not possible to deserialize the cache data, try purge cache from expert settings menu')
-        raise CacheMiss from exc
+        raise_from(CacheMiss, exc)

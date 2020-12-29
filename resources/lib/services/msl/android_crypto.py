@@ -12,6 +12,8 @@ from __future__ import absolute_import, division, unicode_literals
 import base64
 import json
 
+from future.utils import raise_from
+
 import xbmcdrm
 
 from resources.lib.common.exceptions import MSLError
@@ -37,7 +39,8 @@ class AndroidMSLCrypto(MSLBaseCrypto):
         except Exception as exc:  # pylint: disable=broad-except
             import traceback
             LOG.error(traceback.format_exc())
-            raise MSLError('Failed to construct Widevine CryptoSession') from exc
+            raise_from(MSLError('Failed to construct Widevine CryptoSession'),
+                       exc)
 
         drm_info = {
             'version': self.crypto_session.GetPropertyString('version'),

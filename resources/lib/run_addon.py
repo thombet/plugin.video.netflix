@@ -9,6 +9,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 from functools import wraps
+from future.utils import raise_from
 
 from xbmc import getCondVisibility, Monitor, getInfoLabel
 
@@ -160,7 +161,7 @@ def _execute(executor_type, pathitems, params, root_handler):
             WndHomeProps[WndHomeProps.CURRENT_DIRECTORY] = executor.__name__
             WndHomeProps[WndHomeProps.IS_CONTAINER_REFRESHED] = None
     except AttributeError as exc:
-        raise InvalidPathError('Unknown action {}'.format('/'.join(pathitems))) from exc
+        raise_from(InvalidPathError('Unknown action {}'.format('/'.join(pathitems))), exc)
 
 
 def _get_service_status():

@@ -12,6 +12,7 @@ from __future__ import absolute_import, division, unicode_literals
 
 import json
 
+from future.utils import raise_from
 
 import resources.lib.utils.website as website
 import resources.lib.common as common
@@ -67,7 +68,7 @@ class SessionHTTPRequests(SessionBase):
                 timeout=8)
         except exceptions.ReadTimeout as exc:
             LOG.error('HTTP Request ReadTimeout error: {}', exc)
-            raise HttpErrorTimeout from exc
+            raise_from(HttpErrorTimeout, exc)
         LOG.debug('Request took {}s', perf_clock() - start)
         LOG.debug('Request returned status code {}', response.status_code)
         # for redirect in response.history:
@@ -111,7 +112,7 @@ class SessionHTTPRequests(SessionBase):
             # Needed to do a new login
             common.purge_credentials()
             ui.show_notification(common.get_local_string(30008))
-            raise NotLoggedInError from exc
+            raise_from(NotLoggedInError, exc)
         except exceptions.RequestException:
             import traceback
             LOG.warn('Failed to refresh session data, request error (RequestException)')

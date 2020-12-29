@@ -10,6 +10,7 @@
 from __future__ import absolute_import, division, unicode_literals
 
 from time import time
+from future.utils import raise_from
 
 import xbmcvfs
 
@@ -73,7 +74,7 @@ def load():
         import traceback
         LOG.error('Failed to load cookies from file: {exc}', exc=exc)
         LOG.error(traceback.format_exc())
-        raise MissingCookiesError from exc
+        raise_from(MissingCookiesError, exc)
     finally:
         cookie_file.close()
 
