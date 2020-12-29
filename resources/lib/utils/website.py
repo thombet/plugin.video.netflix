@@ -12,6 +12,8 @@ from __future__ import absolute_import, division, unicode_literals
 import json
 from re import search, compile as recompile, DOTALL, sub
 
+from future.utils import iteritems
+
 import xbmc
 
 import resources.lib.common as common
@@ -139,7 +141,7 @@ def parse_profiles(data):
             raise InvalidProfilesError('It has not been possible to obtain the list of profiles.')
         sort_order = 0
         current_guids = []
-        for index, profile_data in profiles_list.items():  # pylint: disable=unused-variable
+        for index, profile_data in iteritems(profiles_list):  # pylint: disable=unused-variable
             summary = jgraph_get('summary', profile_data)
             guid = summary['guid']
             current_guids.append(guid)
@@ -151,7 +153,7 @@ def parse_profiles(data):
             # Add profile language description translated from locale
             summary['language_desc'] = xbmc.convertLanguage(summary['language'][:2], xbmc.ENGLISH_NAME)
             if LOG.level == LOG.LEVEL_VERBOSE:
-                for key, value in summary.items():
+                for key, value in iteritems(summary):
                     if key in PROFILE_DEBUG_INFO:
                         LOG.debug('Profile info {}', {key: value})
             # Translate the profile name, is coded as HTML

@@ -12,6 +12,7 @@ from __future__ import absolute_import, division, unicode_literals
 import sqlite3 as sql
 import threading
 from functools import wraps
+from future.utils import iteritems
 
 import resources.lib.common as common
 import resources.lib.database.db_base as db_base
@@ -247,7 +248,7 @@ class SQLiteDatabase(db_base.BaseDatabase):
             query = 'INSERT OR REPLACE INTO {} ({}, {}) VALUES (?, ?)'.format(table_name,
                                                                               table_columns[0],
                                                                               table_columns[1])
-            records_values = [(key, common.convert_to_string(value)) for key, value in dict_values.items()]
+            records_values = [(key, common.convert_to_string(value)) for key, value in iteritems(dict_values)]
         else:
             # sqlite UPSERT clause exists only on sqlite >= 3.24.0
             query = ('INSERT INTO {tbl_name} ({tbl_col1}, {tbl_col2}) VALUES (?, ?) '
@@ -256,7 +257,7 @@ class SQLiteDatabase(db_base.BaseDatabase):
                                                     tbl_col1=table_columns[0],
                                                     tbl_col2=table_columns[1])
             records_values = []
-            for key, value in dict_values.items():
+            for key, value in iteritems(dict_values):
                 value_str = common.convert_to_string(value)
                 records_values.append((key, value_str, value_str, key))
         cur = self.get_cursor()

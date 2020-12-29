@@ -13,6 +13,8 @@ from __future__ import absolute_import, division, unicode_literals
 import os
 from datetime import datetime
 
+from future.utils import iteritems
+
 import resources.lib.utils.api_requests as api
 import resources.lib.common as common
 import resources.lib.kodi.nfo as nfo
@@ -271,7 +273,7 @@ class Library(LibraryTasks):
         excluded_videoids_values = G.SHARED_DB.get_tvshows_id_list(VidLibProp['exclude_update'], True)
         # Start the update operations
         with ui.ProgressDialog(show_prg_dialog, max_value=len(videoids_tasks)) as progress_bar:
-            for videoid, task_handler in videoids_tasks.items():
+            for videoid, task_handler in iteritems(videoids_tasks):
                 # Check if current videoid is excluded from updates
                 if int(videoid.value) in excluded_videoids_values:
                     continue

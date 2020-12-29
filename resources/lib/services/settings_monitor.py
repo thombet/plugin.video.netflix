@@ -9,6 +9,7 @@
 """
 from __future__ import absolute_import, division, unicode_literals
 import sys
+from future.utils import iteritems
 
 import xbmc
 
@@ -64,7 +65,7 @@ class SettingsMonitor(xbmc.Monitor):
         _check_esn()
 
         # Check menu settings changes
-        for menu_id, menu_data in G.MAIN_MENU_ITEMS.items():
+        for menu_id, menu_data in iteritems(G.MAIN_MENU_ITEMS):
             # Check settings changes in show/hide menu
             if menu_data.get('has_show_setting', True):
                 show_menu_new_setting = bool(G.ADDON.getSettingBool('_'.join(('show_menu', menu_id))))

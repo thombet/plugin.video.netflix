@@ -11,6 +11,8 @@ from __future__ import absolute_import, division, unicode_literals
 
 from functools import wraps
 
+from future.utils import iteritems
+
 import xbmc
 import xbmcgui
 import xbmcplugin
@@ -81,7 +83,7 @@ def _convert_dict_to_listitem(dict_item):
             'TotalTime': dict_item.get('TotalTime', ''),
             'ResumeTime': dict_item.get('ResumeTime', '')
         })
-    for stream_type, quality_info in dict_item.get('quality_info', {}).items():
+    for stream_type, quality_info in iteritems(dict_item.get('quality_info', {})):
         list_item.addStreamInfo(stream_type, quality_info)
     list_item.setProperties(properties)
     list_item.setInfo('video', dict_item.get('info', {}))

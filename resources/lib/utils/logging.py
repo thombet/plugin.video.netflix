@@ -13,6 +13,7 @@ from __future__ import absolute_import, division, unicode_literals
 import sys
 import time
 from functools import wraps
+from future.utils import iteritems
 
 import xbmc
 
@@ -137,7 +138,7 @@ def logdetails_decorator(func):
         that = args[0]
         class_name = that.__class__.__name__
         arguments = [':{} = {}:'.format(key, value)
-                     for key, value in kwargs.items()
+                     for key, value in iteritems(kwargs)
                      if key not in ['account', 'credentials']]
         if arguments:
             LOG.debug('{cls}::{method} called with arguments {args}',

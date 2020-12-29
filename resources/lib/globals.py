@@ -23,6 +23,8 @@ except ImportError:  # Python 2
     from urllib2 import unquote
     from urlparse import parse_qsl, urlparse
 
+from future.utils import iteritems
+
 import xbmcaddon
 from xbmcgui import Window
 
@@ -351,7 +353,7 @@ class GlobalVariables(object):
 
     def is_known_menu_context(self, context):
         """Return true if context are one of the menu with loco_known=True"""
-        for _, data in self.MAIN_MENU_ITEMS.items():
+        for _, data in iteritems(self.MAIN_MENU_ITEMS):
             if data['loco_known']:
                 if data['loco_contexts'][0] == context:
                     return True
