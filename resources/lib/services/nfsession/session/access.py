@@ -160,10 +160,11 @@ class SessionAccess(SessionCookie, SessionHTTPRequests):
         # Perform the website logout
         self.get('logout')
 
-        with G.SETTINGS_MONITOR.ignore_events(2):
-            # Disable and reset auto-update / auto-sync features
-            G.ADDON.setSettingInt('lib_auto_upd_mode', 1)
-            G.ADDON.setSettingBool('lib_sync_mylist', False)
+        G.settings_monitor_suspend(True)
+
+        # Disable and reset auto-update / auto-sync features
+        G.ADDON.setSettingInt('lib_auto_upd_mode', 1)
+        G.ADDON.setSettingBool('lib_sync_mylist', False)
         G.SHARED_DB.delete_key('sync_mylist_profile_guid')
 
         # Disable and reset the profile guid of profile auto-selection
@@ -171,6 +172,8 @@ class SessionAccess(SessionCookie, SessionHTTPRequests):
 
         # Disable and reset the selected profile guid for library playback
         G.LOCAL_DB.set_value('library_playback_profile_guid', '')
+
+        G.settings_monitor_suspend(False)
 
         # Delete cookie and credentials
         self.session.cookies.clear()
