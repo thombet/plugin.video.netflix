@@ -21,7 +21,7 @@ from resources.lib.kodi.library_utils import remove_videoid_from_db, insert_vide
 from resources.lib.utils.logging import LOG
 
 
-class LibraryJobs:
+class LibraryJobs(object):
     """Type of jobs for a task in order to execute library operations"""
 
     is_abort_requested = False

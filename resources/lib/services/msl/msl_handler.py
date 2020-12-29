@@ -26,7 +26,7 @@ from .msl_utils import ENDPOINTS, display_error_info, MSL_DATA_FILENAME, create_
 from .profiles import enabled_profiles
 
 
-class MSLHandler:
+class MSLHandler(object):
     """Handles session management and crypto for license, manifest and event requests"""
     last_license_url = ''
     licenses_session_id = []
@@ -62,6 +62,7 @@ class MSLHandler:
                           'BT0OOLkk0fQ6a1LSqA49eN3RufKYq4LT+G+ffdgoDmKpIWS3bp7xQ6GeYtDAUh0D8Ipwc8aKzP2')
 
     def __init__(self):
+        super(MSLHandler, self).__init__()
         self._events_handler_thread = None
         self._init_msl_handler()
         common.register_slot(

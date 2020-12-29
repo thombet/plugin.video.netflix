@@ -54,4 +54,4 @@ class NetflixTCPServer(TCPServer):
         """Initialization of NetflixTCPServer"""
         LOG.info('Constructing NetflixTCPServer')
         self.netflix_session = NetflixSession()
-        super().__init__(server_address, NetflixHttpRequestHandler)
+        TCPServer.__init__(self, server_address, NetflixHttpRequestHandler)

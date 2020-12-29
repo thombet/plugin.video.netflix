@@ -36,7 +36,7 @@ class DefaultMSLCrypto(MSLBaseCrypto):
     """Crypto Handler for non-Android platforms"""
 
     def __init__(self):
-        super().__init__()
+        super(DefaultMSLCrypto, self).__init__()
         self.rsa_key = None
         self.encryption_key = None
         self.sign_key = None

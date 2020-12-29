@@ -24,7 +24,7 @@ class AMUpNextNotifier(ActionManager):
     SETTING_ID = 'UpNextNotifier_enabled'
 
     def __init__(self):
-        super().__init__()
+        super(AMUpNextNotifier, self).__init__()
         self.upnext_info = None
 
     def __str__(self):

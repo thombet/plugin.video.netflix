@@ -42,9 +42,9 @@ class ControlLabel:
 class ControlGeneric(Control):
     """A reimplementation of the xbmcgui Control methods of all control classes"""
 
-    def __init__(self):  # pylint: disable=useless-super-delegation
+    def __init__(self):  # pylint: disable=useless-super-delegation,super-on-old-class
         """A stub constructor for the xbmcgui Control class"""
-        super().__init__()
+        super(ControlGeneric, self).__init__()
 
     @staticmethod
     def getLabel():

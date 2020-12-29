@@ -22,7 +22,7 @@ from resources.lib.utils.esn import get_esn, generate_android_esn, generate_esn
 from resources.lib.utils.logging import LOG, measure_exec_time_decorator
 
 
-class AddonActionExecutor:
+class AddonActionExecutor(object):
     """Executes actions"""
     # pylint: disable=no-self-use
     def __init__(self, params):

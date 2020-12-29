@@ -40,7 +40,7 @@ def allow_execution_decorator(check_addon=True, check_lib=False, inject_videoid=
     return allow_execution
 
 
-class KeymapsActionExecutor:
+class KeymapsActionExecutor(object):
     """Executes keymaps actions"""
 
     def __init__(self, params):

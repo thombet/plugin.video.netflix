@@ -16,7 +16,7 @@ from .api_paths import resolve_refs
 from .logging import LOG
 
 
-class LoCo:
+class LoCo(object):
     """List of components (LoCo)"""
     def __init__(self, path_response):
         self.data = path_response

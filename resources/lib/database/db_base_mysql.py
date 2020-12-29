@@ -63,7 +63,7 @@ class MySQLDatabase(db_base.BaseDatabase):
                 'charset': 'utf8',
                 'use_unicode': True
             }
-        super().__init__()
+        super(MySQLDatabase, self).__init__()
 
     def _initialize_connection(self):
         try:
