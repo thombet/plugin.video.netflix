@@ -13,6 +13,11 @@ import resources.lib.common as common
 import resources.lib.kodi.ui as ui
 from resources.lib.utils.logging import LOG
 
+try:  # Python 2
+    unicode
+except NameError:  # Python 3
+    unicode = str  # pylint: disable=redefined-builtin
+
 
 class NFOSettings(object):
     def __init__(self, enforce=None):
@@ -170,5 +175,5 @@ def _build_root_node(root_name, tags):
     for (k, v) in list(tags.items()):
         if v:
             tag = ET.SubElement(root, k)
-            tag.text = str(v)
+            tag.text = unicode(v)
     return root

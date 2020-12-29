@@ -16,6 +16,10 @@ from resources.lib.globals import G
 from resources.lib.utils.logging import LOG, measure_exec_time_decorator
 from .misc_utils import run_threaded
 
+try:  # Python 2
+    unicode
+except NameError:  # Python 3
+    unicode = str  # pylint: disable=redefined-builtin
 
 IPC_TIMEOUT_SECS = 20
 IPC_EXCEPTION_PLACEHOLDER = 'IPC_EXCEPTION_PLACEHOLDER'
@@ -221,7 +225,7 @@ def ipc_convert_exc_to_json(exc=None, class_name=None, message=None):
     """
     return {IPC_EXCEPTION_PLACEHOLDER: {
         'class': class_name or exc.__class__.__name__,
-        'message': message or str(exc),
+        'message': message or unicode(exc),
     }}
 
 

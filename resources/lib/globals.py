@@ -26,6 +26,12 @@ import xbmcvfs
 from xbmcgui import Window
 
 
+try:  # Python 2
+    unicode
+except NameError:  # Python 3
+    unicode = str  # pylint: disable=redefined-builtin,invalid-name
+
+
 class GlobalVariables(object):
     """Encapsulation for global variables to work around quirks with
     Kodi's reuseLanguageInvoker behavior"""
@@ -254,7 +260,7 @@ class GlobalVariables(object):
         packages_paths = [
             os.path.join(self.ADDON_DATA_PATH, 'packages', 'mysql-connector-python')
         ]
-        for path in packages_paths:
+        for path in packages_paths:  # packages_paths has unicode type values
             path = xbmcvfs.translatePath(path)
             if path not in sys.path:
                 # Add embedded package path to python system directory

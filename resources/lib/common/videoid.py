@@ -11,6 +11,11 @@ from functools import wraps
 
 from .exceptions import InvalidVideoId
 
+try:  # Python 2
+    unicode
+except NameError:  # Python 3
+    unicode = str  # pylint: disable=redefined-builtin
+
 
 class VideoId(object):
     """Universal representation of a video id. Video IDs can be of multiple types:
@@ -213,7 +218,7 @@ class VideoId(object):
         represent a show."""
         if self.mediatype != VideoId.SHOW:
             raise InvalidVideoId('Cannot derive season VideoId from {}'.format(self))
-        return type(self)(tvshowid=self.tvshowid, seasonid=str(seasonid))
+        return type(self)(tvshowid=self.tvshowid, seasonid=unicode(seasonid))
 
     def derive_episode(self, episodeid):
         """Return a new VideoId instance that represents the given episode
@@ -222,7 +227,7 @@ class VideoId(object):
         if self.mediatype != VideoId.SEASON:
             raise InvalidVideoId('Cannot derive episode VideoId from {}'.format(self))
         return type(self)(tvshowid=self.tvshowid, seasonid=self.seasonid,
-                          episodeid=str(episodeid))
+                          episodeid=unicode(episodeid))
 
     def derive_parent(self, videoid_type):
         """
@@ -269,7 +274,7 @@ class VideoId(object):
 
 def _get_unicode_kwargs(kwargs):
     # Example of return value: (None, None, '70084801', None, None, None) this is a movieid
-    return tuple((str(kwargs[idpart])
+    return tuple((unicode(kwargs[idpart])
                   if kwargs.get(idpart)
                   else None)
                  for idpart
