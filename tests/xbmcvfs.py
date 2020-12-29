@@ -87,12 +87,12 @@ def rmdir(path):
     return os.rmdir(path)
 
 
-def makeLegalFilename(filename):
+def makeLegalFilename(filename):  # Kodi >= 19 (on xbmc there is the method for Kodi 18)
     """A reimplementation of the xbmc makeLegalFilename() function"""
     return os.path.basename(filename)
 
 
-def translatePath(path):
+def translatePath(path):  # Kodi >= 19 (on xbmc there is the method for Kodi 18)
     """A stub implementation of the xbmc translatePath() function"""
     if path.startswith('special://home'):
         return path.replace('special://home', os.path.join(os.getcwd(), 'test'))

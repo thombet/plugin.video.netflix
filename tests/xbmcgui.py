@@ -100,6 +100,7 @@ class Dialog:
         print('\033[37;100mNOTIFICATION:\033[35;0m [%s] \033[35;0m%s\033[39;0m' % (heading, message))
 
     @staticmethod
+    # ok(heading, line1, line2=None, line3=None):  # Kodi 18
     def ok(heading, message):
         """A stub implementation for the xbmcgui Dialog class ok() method"""
         heading = kodi_to_ansi(heading)
@@ -107,6 +108,7 @@ class Dialog:
         print('\033[37;100mOK:\033[35;0m [%s] \033[35;0m%s\033[39;0m' % (heading, message))
 
     @staticmethod
+    # def yesno(heading, line1, line2=None, line3=None, nolabel=None, yeslabel=None, autoclose=0):  # Kodi 18
     def yesno(heading, message, nolabel=None, yeslabel=None, customlabel=None, autoclose=0):
         """A stub implementation for the xbmcgui Dialog class yesno() method"""
         heading = kodi_to_ansi(heading)
@@ -141,6 +143,7 @@ class Dialog:
         return ''
 
     @staticmethod
+    # def numeric(type, heading, defaultt=''):  # Kodi 18
     def numeric(type, heading, defaultt='', bHiddenInput=False):  # pylint: disable=redefined-builtin
         """A stub implementation for the xbmcgui Dialog class numeric() method"""
         return
@@ -164,6 +167,7 @@ class DialogProgress:
         return
 
     @staticmethod
+    # def create(heading, line1=None, line2=None, line3=None):  # Kodi 18
     def create(heading, message=None):
         """A stub implementation for the xbmcgui DialogProgress class create() method"""
         heading = kodi_to_ansi(heading)
@@ -177,6 +181,7 @@ class DialogProgress:
     def iscanceled():
         """A stub implementation for the xbmcgui DialogProgress class iscanceled() method"""
 
+    # def update(self, percent, line1=None, line2=None, line3=None):  # Kodi 18
     def update(self, percent, message=None):
         """A stub implementation for the xbmcgui DialogProgress class update() method"""
         if (percent - 5) < self.percent:
@@ -202,6 +207,7 @@ class DialogProgressBG:
         return
 
     @staticmethod
+    # def create(heading, line1=None, line2=None, line3=None):  # Kodi 18
     def create(heading, message=None):
         """A stub implementation for the xbmcgui DialogProgressBG class create() method"""
         heading = kodi_to_ansi(heading)
@@ -216,6 +222,7 @@ class DialogProgressBG:
         """A stub implementation for the xbmcgui DialogProgressBG class isFinished() method"""
         return True
 
+    # def update(self, percent, line1=None, line2=None, line3=None):  # Kodi 18
     def update(self, percent=None, heading=None, message=None):
         """A stub implementation for the xbmcgui DialogProgressBG class update() method"""
         if (percent - 5) < self.percent:
@@ -246,6 +253,7 @@ class DialogBusy:
 class ListItem:
     """A reimplementation of the xbmcgui ListItem class"""
 
+    # def __init__(self, label='', label2='', iconImage='', thumbnailImage='', path='', offscreen=False):  # Kodi 18
     def __init__(self, label='', label2='', path='', offscreen=False):
         """A stub constructor for the xbmcgui ListItem class"""
         self.label = kodi_to_ansi(label)
