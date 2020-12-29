@@ -20,6 +20,11 @@ try:
 except ImportError:
     import pickle
 
+try:  # Kodi >= 19
+    from xbmcvfs import translatePath  # pylint: disable=ungrouped-imports
+except ImportError:  # Kodi 18
+    from xbmc import translatePath  # pylint: disable=ungrouped-imports
+
 
 def save(cookie_jar, log_output=True):
     """Save a cookie jar to file and in-memory storage"""
@@ -86,7 +91,7 @@ def log_cookie(cookie_jar):
 
 def cookie_file_path():
     """Return the file path to store cookies"""
-    return xbmcvfs.translatePath(G.COOKIES_PATH)
+    return translatePath(G.COOKIES_PATH)
 
 
 def convert_chrome_cookie(cookie):
