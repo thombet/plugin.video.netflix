@@ -14,9 +14,11 @@ import resources.lib.utils.website as website
 import resources.lib.common as common
 import resources.lib.utils.cookies as cookies
 import resources.lib.kodi.ui as ui
+from resources.lib.utils.esn import get_esn
 from resources.lib.common.exceptions import (LoginValidateError, NotConnected, NotLoggedInError,
                                              MbrStatusNeverMemberError, MbrStatusFormerMemberError, LoginError,
                                              MissingCredentialsError, MbrStatusAnonymousError, WebsiteParsingError)
+from resources.lib.database.db_utils import TABLE_SESSION
 from resources.lib.globals import G
 from resources.lib.services.nfsession.session.cookie import SessionCookie
 from resources.lib.services.nfsession.session.http_requests import SessionHTTPRequests
@@ -56,7 +58,12 @@ class SessionAccess(SessionCookie, SessionHTTPRequests):
 
     def is_logged_in(self):
         """Check if there are valid login data"""
-        return self._load_cookies() and self._verify_session_cookies()
+        valid_login = self._load_cookies() and self._verify_session_cookies() and self._verify_esn_existence()
+        return valid_login
+
+    @staticmethod
+    def _verify_esn_existence():
+        return bool(get_esn())
 
     def get_safe(self, endpoint, **kwargs):
         """
@@ -179,6 +186,9 @@ class SessionAccess(SessionCookie, SessionHTTPRequests):
         self.session.cookies.clear()
         cookies.delete()
         common.purge_credentials()
+
+        # Reset the ESN obtained from website/generated
+        G.LOCAL_DB.set_value('esn', '', TABLE_SESSION)
 
         # Reinitialize the MSL handler (delete msl data file, then reset everything)
         common.send_signal(signal=common.Signals.REINITIALIZE_MSL_HANDLER, data=True)

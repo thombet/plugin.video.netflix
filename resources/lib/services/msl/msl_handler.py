@@ -17,7 +17,7 @@ from resources.lib.common.cache_utils import CACHE_MANIFESTS
 from resources.lib.common.exceptions import CacheMiss, MSLError
 from resources.lib.database.db_utils import TABLE_SESSION
 from resources.lib.globals import G
-from resources.lib.utils.esn import get_esn, set_esn
+from resources.lib.utils.esn import get_esn
 from resources.lib.utils.logging import LOG, measure_exec_time_decorator
 from .converter import convert_to_dash
 from .events_handler import EventsHandler
@@ -28,7 +28,6 @@ from .profiles import enabled_profiles
 
 class MSLHandler:
     """Handles session management and crypto for license, manifest and event requests"""
-    http_ipc_slots = {}
     last_license_url = ''
     licenses_session_id = []
     licenses_xid = []
@@ -66,6 +65,9 @@ class MSLHandler:
         self._events_handler_thread = None
         self._init_msl_handler()
         common.register_slot(
+            signal=common.Signals.ESN_CHANGED,
+            callback=self.msl_requests.perform_key_handshake)
+        common.register_slot(
             signal=common.Signals.RELEASE_LICENSE,
             callback=self.release_license)
         common.register_slot(
@@ -77,11 +79,6 @@ class MSLHandler:
         common.register_slot(
             signal=common.Signals.SWITCH_EVENTS_HANDLER,
             callback=self.switch_events_handler)
-        # Register slot perform_key_handshake to IPC
-        func_name = self.msl_requests.perform_key_handshake.__name__
-        enveloped_func = common.EnvelopeIPCReturnCall(self.msl_requests.perform_key_handshake).call
-        self.http_ipc_slots[func_name] = enveloped_func  # HTTP IPC (http_server.py)
-        common.register_slot(enveloped_func, func_name)  # AddonSignals IPC
 
     def _init_msl_handler(self):
         self.msl_requests = None
@@ -122,11 +119,7 @@ class MSLHandler:
         :return: MPD XML Manifest or False if no success
         """
         try:
-            esn = get_esn()
-            # When the add-on is installed from scratch or you logout the account the ESN will be empty
-            if not esn:
-                esn = set_esn()
-            manifest = self._load_manifest(viewable_id, esn)
+            manifest = self._load_manifest(viewable_id, get_esn())
         except MSLError as exc:
             if 'Email or password is incorrect' in str(exc):
                 # Known cases when MSL error "Email or password is incorrect." can happen:
@@ -170,7 +163,7 @@ class MSLHandler:
 
         LOG.info('Requesting manifest for {} with ESN {} and HDCP {}',
                  viewable_id,
-                 common.censure(esn) if len(esn) > 50 else esn,
+                 common.censure(esn) if G.ADDON.getSetting('esn') else esn,
                  hdcp_version)
 
         profiles = enabled_profiles()
