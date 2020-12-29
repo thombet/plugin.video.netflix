@@ -13,7 +13,6 @@ import resources.lib.common as common
 import resources.lib.database.db_base_mysql as db_base_mysql
 import resources.lib.database.db_base_sqlite as db_base_sqlite
 import resources.lib.database.db_utils as db_utils
-from resources.lib.common.exceptions import DBRecordNotExistError
 
 
 def get_shareddb_class(use_mysql=False):
@@ -68,18 +67,16 @@ def get_shareddb_class(use_mysql=False):
 
         @db_base_mysql.handle_connection
         @db_base_sqlite.handle_connection
-        def get_movie_filepath(self, movieid):
+        def get_movie_filepath(self, movieid, default_value=None):
             """Get movie filepath for given id"""
             query = 'SELECT FilePath FROM video_lib_movies WHERE MovieID = ?'
             cur = self._execute_query(query, (movieid,))
             result = cur.fetchone()
-            if not result:
-                raise DBRecordNotExistError
-            return result[0]
+            return result[0] if result else default_value
 
         @db_base_mysql.handle_connection
         @db_base_sqlite.handle_connection
-        def get_episode_filepath(self, tvshowid, seasonid, episodeid):
+        def get_episode_filepath(self, tvshowid, seasonid, episodeid, default_value=None):
             """Get movie filepath for given id"""
             query =\
                 ('SELECT FilePath FROM video_lib_episodes '
@@ -90,9 +87,7 @@ def get_shareddb_class(use_mysql=False):
                  'video_lib_episodes.EpisodeID = ?')
             cur = self._execute_query(query, (tvshowid, seasonid, episodeid))
             result = cur.fetchone()
-            if not result:
-                raise DBRecordNotExistError
-            return result[0]
+            return result[0] if result is not None else default_value
 
         @db_base_mysql.handle_connection
         @db_base_sqlite.handle_connection
@@ -107,10 +102,7 @@ def get_shareddb_class(use_mysql=False):
                  'ON video_lib_episodes.SeasonID = video_lib_seasons.SeasonID '
                  'WHERE video_lib_seasons.TvShowID = ?')
             cur = self._execute_query(query, (tvshowid,), cur)
-            result = cur.fetchall()
-            if not result:
-                raise DBRecordNotExistError
-            return result
+            return cur.fetchall()
 
         @db_base_mysql.handle_connection
         @db_base_sqlite.handle_connection
@@ -126,14 +118,11 @@ def get_shareddb_class(use_mysql=False):
                  'WHERE video_lib_seasons.TvShowID = ? AND '
                  'video_lib_seasons.SeasonID = ?')
             cur = self._execute_query(query, (tvshowid, seasonid), cur)
-            result = cur.fetchall()
-            if not result:
-                raise DBRecordNotExistError
-            return result
+            return cur.fetchall()
 
         @db_base_mysql.handle_connection
         @db_base_sqlite.handle_connection
-        def get_random_episode_filepath_from_tvshow(self, tvshowid):
+        def get_random_episode_filepath_from_tvshow(self, tvshowid, default_value=None):
             """Get random episode filepath of a show of a given id"""
             rand_func_name = 'RAND()' if self.is_mysql_database else 'RANDOM()'
             query =\
@@ -144,13 +133,11 @@ def get_shareddb_class(use_mysql=False):
                  'ORDER BY {} LIMIT 1').format(rand_func_name)
             cur = self._execute_query(query, (tvshowid,))
             result = cur.fetchone()
-            if not result:
-                raise DBRecordNotExistError
-            return result[0]
+            return result[0] if result is not None else default_value
 
         @db_base_mysql.handle_connection
         @db_base_sqlite.handle_connection
-        def get_random_episode_filepath_from_season(self, tvshowid, seasonid):
+        def get_random_episode_filepath_from_season(self, tvshowid, seasonid, default_value=None):
             """Get random episode filepath of a show of a given id"""
             rand_func_name = 'RAND()' if self.is_mysql_database else 'RANDOM()'
             query =\
@@ -161,9 +148,7 @@ def get_shareddb_class(use_mysql=False):
                  'ORDER BY {} LIMIT 1').format(rand_func_name)
             cur = self._execute_query(query, (tvshowid, seasonid))
             result = cur.fetchone()
-            if not result:
-                raise DBRecordNotExistError
-            return result[0]
+            return result[0] if result is not None else default_value
 
         @db_base_mysql.handle_connection
         @db_base_sqlite.handle_connection
