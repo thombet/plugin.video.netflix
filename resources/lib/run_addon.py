@@ -33,7 +33,7 @@ def catch_exceptions_decorator(func):
             success = True
         except BackendNotReady as exc_bnr:
             from resources.lib.kodi.ui import show_backend_not_ready
-            show_backend_not_ready(str(exc_bnr))
+            show_backend_not_ready(G.py2_decode(str(exc_bnr), 'latin-1'))
         except InputStreamHelperError as exc:
             from resources.lib.kodi.ui import show_ok_dialog
             show_ok_dialog('InputStream Helper Add-on error',
@@ -57,7 +57,7 @@ def catch_exceptions_decorator(func):
         except Exception as exc:
             import traceback
             from resources.lib.kodi.ui import show_addon_error_info
-            LOG.error(traceback.format_exc())
+            LOG.error(G.py2_decode(traceback.format_exc(), 'latin-1'))
             show_addon_error_info(exc)
         finally:
             if not success:
