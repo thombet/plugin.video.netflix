@@ -337,12 +337,5 @@ class Window:
         """A stub implementation for the xbmcgui Window class setProperty() method"""
 
 
-class WindowXML(Window):
-    """A reimplementation of the xbmcgui WindowXML"""
-    def __init__(self, xmlFilename, scriptPath, defaultSkin='Default', defaultRes='720p', isMedia=False):
-        """A stub constructor for the xbmcgui WindowXML class"""
-        super().__init__()
-
-
-class WindowXMLDialog(WindowXML):
+class WindowXMLDialog(Window):
     """A reimplementation of the xbmcgui WindowXMLDialog"""
