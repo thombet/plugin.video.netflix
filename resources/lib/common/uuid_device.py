@@ -7,6 +7,8 @@
     SPDX-License-Identifier: MIT
     See LICENSES/MIT.md for more information.
 """
+from __future__ import absolute_import, division, unicode_literals
+
 from resources.lib.utils.logging import LOG
 from .device_utils import get_system_platform
 

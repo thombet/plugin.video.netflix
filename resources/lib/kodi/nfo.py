@@ -7,6 +7,8 @@
     SPDX-License-Identifier: MIT
     See LICENSES/MIT.md for more information.
 """
+from __future__ import absolute_import, division, unicode_literals
+
 import xml.etree.ElementTree as ET
 from resources.lib.globals import G
 import resources.lib.common as common

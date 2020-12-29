@@ -1,4 +1,5 @@
 codecov
+future
 kodi-addon-checker
 mysql-connector-python
 polib
