@@ -1,13 +1,11 @@
 name: Release
 on:
   push:
-    branches:
-    - master
     tags:
     - 'v*'
 jobs:
   build:
-    name: Publish release
+    name: Release plugin.video.netflix
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -15,11 +13,15 @@ jobs:
       - name: Build zip files
         run: |
           sudo apt-get install libxml2-utils
-          make build release=1
-      - name: Get zip filename
-        id: get-zip-filename
+          make multizip release=1
+      - name: Get Leia filename
+        id: get-leia-filename
         run: |
-          echo ::set-output name=zip-filename::$(cd ..;ls plugin.video.netflix*.zip | head -1)
+          echo ::set-output name=leia-filename::$(cd ..;ls plugin.video.netflix*.zip | grep -v '+matrix.' | head -1)
+      - name: Get Matrix filename
+        id: get-matrix-filename
+        run: |
+          echo ::set-output name=matrix-filename::$(cd ..;ls plugin.video.netflix*+matrix.*.zip | head -1)
       - name: Get body
         id: get-body
         run: |
@@ -29,7 +31,7 @@ jobs:
           description="${description//$'\n'/'%0A'}"
           description="${description//$'\r'/'%0D'}"
           echo ::set-output name=body::$description
-      - name: Create GitHub Release
+      - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
@@ -40,13 +42,23 @@ jobs:
           body: ${{ steps.get-body.outputs.body }}
           draft: false
           prerelease: false
-      - name: Upload zip file
-        id: upload-zip
+      - name: Upload Leia zip
+        id: upload-leia-zip
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_name: ${{ steps.get-zip-filename.outputs.zip-filename }}
-          asset_path: ../${{ steps.get-zip-filename.outputs.zip-filename }}
+          asset_name: ${{ steps.get-leia-filename.outputs.leia-filename }}
+          asset_path: ../${{ steps.get-leia-filename.outputs.leia-filename }}
+          asset_content_type: application/zip
+      - name: Upload Matrix zip
+        id: upload-matrix-zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_name: ${{ steps.get-matrix-filename.outputs.matrix-filename }}
+          asset_path: ../${{ steps.get-matrix-filename.outputs.matrix-filename }}
           asset_content_type: application/zip
