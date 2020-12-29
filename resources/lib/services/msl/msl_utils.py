@@ -11,7 +11,6 @@ import json
 import random
 import time
 from functools import wraps
-from urllib.parse import urlencode
 
 import xbmcgui
 
@@ -21,6 +20,12 @@ from resources.lib.common.exceptions import MSLError
 from resources.lib.database.db_utils import TABLE_SESSION
 from resources.lib.globals import G
 from resources.lib.utils.esn import get_esn
+
+
+try:  # Python 2
+    from urllib import urlencode
+except ImportError:  # Python 3
+    from urllib.parse import urlencode
 
 CHROME_BASE_URL = 'https://www.netflix.com/nq/msl_v1/cadmium/'
 # 16/10/2020 There is a new api endpoint to now used only for events/logblobs

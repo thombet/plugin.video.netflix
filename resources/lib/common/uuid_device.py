@@ -68,10 +68,13 @@ def _get_system_uuid():
 
 def _get_windows_uuid():
     # pylint: disable=broad-except
-    # pylint: disable=import-error  # Under linux pylint rightly complains
+    # pylint: disable=no-member
     uuid_value = None
     try:
-        import winreg
+        try:  # Python 2
+            import _winreg as winreg
+        except ImportError:  # Python 3
+            import winreg
         registry = winreg.HKEY_LOCAL_MACHINE
         address = 'SOFTWARE\\Microsoft\\Cryptography'
         keyargs = winreg.KEY_READ | winreg.KEY_WOW64_64KEY
@@ -159,7 +162,12 @@ def _parse_osx_xml_plist_data(data):
     import plistlib
     import re
     dict_values = {}
-    xml_data = plistlib.loads(data)
+    try:  # Python 2
+        xml_data = plistlib.readPlistFromString(data)
+    except AttributeError:  # Python => 3.4
+        # pylint: disable=no-member
+        xml_data = plistlib.loads(data)
+
     items_dict = xml_data[0]['_items'][0]
     r = re.compile(r'.*UUID.*')  # Find to example "platform_UUID" key
     uuid_keys = list(filter(r.match, list(items_dict.keys())))

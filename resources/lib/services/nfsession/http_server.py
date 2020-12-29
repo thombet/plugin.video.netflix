@@ -7,12 +7,20 @@
     See LICENSES/MIT.md for more information.
 """
 import json
-from http.server import BaseHTTPRequestHandler
-from socketserver import TCPServer
+
+try:  # Python 3
+    from http.server import BaseHTTPRequestHandler
+except ImportError:
+    from BaseHTTPServer import BaseHTTPRequestHandler
+
+try:  # Python 3
+    from socketserver import TCPServer
+except ImportError:
+    from SocketServer import TCPServer
 
 import resources.lib.common as common
-from resources.lib.services.nfsession.nfsession import NetflixSession
 from resources.lib.utils.logging import LOG
+from resources.lib.services.nfsession.nfsession import NetflixSession
 
 
 class NetflixHttpRequestHandler(BaseHTTPRequestHandler):
