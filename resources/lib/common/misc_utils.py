@@ -7,6 +7,11 @@
     SPDX-License-Identifier: MIT
     See LICENSES/MIT.md for more information.
 """
+try:  # Python 2
+    from itertools import imap as map  # pylint: disable=redefined-builtin
+except ImportError:
+    pass
+
 # try:  # Python 3
 #     from io import StringIO
 # except ImportError:  # Python 2
