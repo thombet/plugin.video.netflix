@@ -88,8 +88,11 @@ def save_file(file_path, content, mode='wb'):
     :param content: The content of the file
     :param mode: optional mode options
     """
-    with xbmcvfs.File(xbmcvfs.translatePath(file_path), mode) as file_handle:
+    file_handle = xbmcvfs.File(xbmcvfs.translatePath(file_path), mode)
+    try:
         file_handle.write(bytearray(content))
+    finally:
+        file_handle.close()
 
 
 def load_file_def(filename, mode='rb'):
@@ -109,8 +112,11 @@ def load_file(file_path, mode='rb'):
     :param mode: optional mode options
     :return: The content of the file
     """
-    with xbmcvfs.File(xbmcvfs.translatePath(file_path), mode) as file_handle:
+    file_handle = xbmcvfs.File(xbmcvfs.translatePath(file_path), mode)
+    try:
         return file_handle.readBytes().decode('utf-8')
+    finally:
+        file_handle.close()
 
 
 def delete_file_safe(file_path):
